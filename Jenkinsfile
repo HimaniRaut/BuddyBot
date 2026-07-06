@@ -73,9 +73,9 @@ pipeline {
                             docker-compose up -d --no-deps frontend backend
 
                             # Pull tinyllama only if not already downloaded
-                            if ! docker exec qualibytes-ollama ollama list 2>/dev/null | grep -q tinyllama; then
+                            if ! docker exec buddybot-ollama ollama list 2>/dev/null | grep -q tinyllama; then
                                 echo "Pulling tinyllama model..."
-                                docker exec qualibytes-ollama ollama pull tinyllama
+                                docker exec buddybot-ollama ollama pull tinyllama
                             fi
 
                             docker-compose ps
@@ -92,7 +92,7 @@ pipeline {
                 echo '=== Verifying deployment ==='
                 sshagent(['app-server-ssh-key']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ubuntu@${APP_SERVER_IP} '
+                        ssh -o StrictHostKeyChecking=no ubuntu@${APP_SERVER_IP}
                             sleep 5
                             curl --retry 5 --retry-delay 3 --fail \
                                  http://localhost:5000/health \
