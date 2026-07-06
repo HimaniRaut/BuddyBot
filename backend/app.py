@@ -36,7 +36,7 @@ def chat():
     system_message = {
         "role": "system",
         "content": (
-            "You are Qualibytes GPT, a helpful and friendly AI assistant. "
+            "You are BuddyBot, a helpful and friendly AI assistant. "
             "You give clear, concise answers. Keep responses short and to the point."
         )
     }
