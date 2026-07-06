@@ -92,12 +92,13 @@ pipeline {
                 echo '=== Verifying deployment ==='
                 sshagent(['app-server-ssh-key']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ubuntu@${APP_SERVER_IP}
+                        ssh -o StrictHostKeyChecking=no ubuntu@${APP_SERVER_IP} '
                             sleep 5
+                            
                             curl --retry 5 --retry-delay 3 --fail \
-                                 http://localhost:5000/health \
-                                 && echo "Backend: HEALTHY" \
-                                 || (echo "Backend: UNHEALTHY" && exit 1)
+                            http://localhost:5000/health \
+                            && echo "Backend: HEALTHY" \
+                            || (echo "Backend: UNHEALTHY" && exit 1)
                         '
                     """
                 }
