@@ -1,4 +1,4 @@
-# 🤖 Qualibytes GPT
+# 🤖 BuddyBot
 
 > A self-hosted AI chat application powered by **tinyllama** via **Ollama** — deployed using a full CI/CD pipeline on **AWS EC2**.
 
@@ -26,7 +26,7 @@
 
 ## 1. Project Overview
 
-Qualibytes GPT is a 3-container application:
+BuddyBot is a 3-container application:
 
 | Service | Technology | What it does |
 |---------|-----------|--------------|
@@ -34,7 +34,7 @@ Qualibytes GPT is a 3-container application:
 | **backend** | Python Flask | API that talks to Ollama |
 | **ollama** | Ollama (tinyllama) | Runs the AI model locally |
 
-All three containers run on a shared Docker network (`qualibytes-network`) and are managed by Docker Compose.
+All three containers run on a shared Docker network (`buddybot-network`) and are managed by Docker Compose.
 
 ---
 
@@ -80,7 +80,7 @@ Jenkins / GitLab Runner
 ## 3. Repository Structure
 
 ```
-qualibytes-gpt/
+buddybot/
 ├── frontend/
 │   ├── Dockerfile          ← Nginx image
 │   ├── nginx.conf          ← Proxy /api/* to backend
@@ -162,8 +162,8 @@ Use this to test the app before setting up CI/CD.
 ### Step 1 — Clone the repo
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/qualibytes-gpt.git
-cd qualibytes-gpt
+git clone https://github.com/YOUR-USERNAME/buddybot.git
+cd buddybot
 ```
 
 ### Step 2 — Run setup script (first time only)
@@ -193,9 +193,9 @@ docker compose ps
 Expected output:
 ```
 NAME                    STATUS
-qualibytes-frontend     Up
-qualibytes-backend      Up
-qualibytes-ollama       Up
+buddybot-frontend     Up
+buddybot-backend      Up
+buddybot-ollama       Up
 ```
 
 ### Useful Docker Compose Commands
@@ -289,7 +289,7 @@ sudo systemctl restart jenkins
 4. Under Pipeline section:
    - Definition: **Pipeline script from SCM**
    - SCM: **Git**
-   - Repository URL: `https://github.com/YOUR-USERNAME/qualibytes-gpt.git`
+   - Repository URL: `https://github.com/YOUR-USERNAME/buddybot.git`
    - Branch: `*/main`
    - Script Path: `Jenkinsfile`
 5. **Save** → **Build Now**
@@ -312,7 +312,7 @@ Now every `git push` will auto-trigger Jenkins!
 
 ```bash
 # Add GitLab as a second remote
-git remote add gitlab https://gitlab.com/YOUR-GITLAB-USERNAME/qualibytes-gpt.git
+git remote add gitlab https://gitlab.com/YOUR-GITLAB-USERNAME/buddybot.git
 
 # Push to GitLab
 git push gitlab main
@@ -384,10 +384,10 @@ docker compose ps
 
 # 2. Backend health check
 curl http://YOUR-EC2-IP:5000/health
-# Expected: {"status": "OK", "app": "Qualibytes GPT Backend", "model": "tinyllama"}
+# Expected: {"status": "OK", "app": "BuddyBot Backend", "model": "tinyllama"}
 
 # 3. tinyllama is downloaded
-docker exec qualibytes-ollama ollama list
+docker exec buddybot ollama list
 # Expected: tinyllama listed
 
 # 4. Test a chat API call directly
@@ -445,7 +445,7 @@ curl http://localhost:11434
 **Cause:** Model was never pulled into the Ollama container.
 ```bash
 # Pull the model manually
-docker exec qualibytes-ollama ollama pull tinyllama
+docker exec buddybot-ollama ollama pull tinyllama
 
 # Verify
 docker exec qualibytes-ollama ollama list
@@ -464,7 +464,7 @@ docker compose logs backend
 docker compose restart backend
 
 # Check nginx config
-docker exec qualibytes-frontend nginx -t
+docker exec buddybot-frontend nginx -t
 ```
 
 ---
